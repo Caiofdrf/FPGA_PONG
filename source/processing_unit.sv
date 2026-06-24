@@ -10,9 +10,15 @@ module processing_unit (
     output logic [7:0] uart_out
 );
 
-`define P1_MOV   temp_ram[0][0];     `define P2_MOV   temp_ram[0][1];     `define BALL_X  temp_ram[0][2];
-`define P1_POS   temp_ram[1][0];     `define P2_POS   temp_ram[1][1];     `define BALL_Y  temp_ram[1][2];
-`define P1_SCORE temp_ram[2][0];     `define P2_SCORE temp_ram[2][1];     `define STR_RST temp_ram[2][2]; 
+`define P1_MOV   temp_ram[0][0]     
+`define P2_MOV   temp_ram[0][1]     
+`define BALL_X   temp_ram[0][2]
+`define P1_POS   temp_ram[1][0]     
+`define P2_POS   temp_ram[1][1]     
+`define BALL_Y   temp_ram[1][2]
+`define P1_SCORE temp_ram[2][0]     
+`define P2_SCORE temp_ram[2][1]     
+`define STR_RST  temp_ram[2][2] 
 
 `define CIMA   16'd2
 `define PARADO 16'd1
@@ -33,9 +39,9 @@ logic signed [15:0] ball_vel_x;
 logic signed [15:0] ball_vel_y;
 
 logic game_over;
-logic p1_wins;
+logic p_wins;
 assign game_over = (`P1_SCORE == 16'd5 || `P2_SCORE == 16'd5);
-assign p1_wins   = (`P1_SCORE == 16'd5);
+assign p_wins   = (`P1_SCORE == 16'd5);
 
 
 /*
