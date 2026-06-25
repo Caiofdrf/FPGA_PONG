@@ -31,7 +31,7 @@ p1_score_val = 0
 p2_score_val = 0
 endgame = 0
 winner = 0
-log_file = open("movements_input.txt", "w")
+log_file = open("./movements_input.txt", "w")
 
 
 score_font = pygame.font.SysFont("Arial", 18, 1, 0)
