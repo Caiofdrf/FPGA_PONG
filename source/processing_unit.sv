@@ -40,8 +40,6 @@ logic signed [15:0] ball_vel_y;
 
 logic game_over;
 logic p_wins;
-assign game_over = (`P1_SCORE == 16'd5 || `P2_SCORE == 16'd5);
-assign p_wins   = (`P1_SCORE == 16'd5);
 
 
 /*
@@ -55,6 +53,9 @@ P1_SCORE   |      P2_SCORE    |     START/RST
 logic [15:0] temp_ram [0:2][0:2];
 
 enum logic [2:0] {IDLE, GET_DATA, POS_CALC, COLS_VER, SAVE_DATA, SEND_DATA} current_state, next_state;
+
+assign game_over = (`P1_SCORE == 16'd5 || `P2_SCORE == 16'd5);
+assign p_wins   = (`P1_SCORE == 16'd5);
 
 always_ff @(posedge clk) begin
   if (rst) begin

@@ -6,7 +6,9 @@ logic clk;
 logic rst;
 logic rx;
 logic tx;
-int file_input, file_output;
+logic [7:0] data_in, data_out;
+logic [7:0] data [0:5];
+int file_input, file_output, j = 0;
 string line;
 
 localparam CLK_PERIOD = 20;
@@ -52,8 +54,13 @@ initial begin
             data_out[i] = tx;
             #(BIT_PERIOD);
         end 
+        data[j] = data_out;
+        j = j + 1;
 
-        $fdisplay(file_output, "%d", data_out);
+        if (j == 6) begin
+            $fdisplay(file_output, "%d    |    %d    |    %d    |    %d    |    %d", data[0], data[1], {data[2], data[3]}, data[4], data[5]);
+            j = 0;
+        end
         $fflush(file_output);
     end
 end
@@ -77,6 +84,7 @@ initial begin
         #(BIT_PERIOD * 3);
     end
     
+    #(BIT_PERIOD * 100);
     $fclose(file_input);
     $fclose(file_output);
 
