@@ -4,7 +4,7 @@ module pong_top(
     input logic clk, 
     input logic rst,
     input logic rx,
-    output logic tx,
+    output logic tx
 );
 
 logic [15:0] ram_data_out [0:2][0:2];

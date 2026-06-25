@@ -161,8 +161,8 @@ always_ff @(posedge clk) begin
 
       COLS_VER: begin
         if (`BALL_X <= 16'd0 && 
-            `BALL_Y <= `P1_POS + PLAYER_MID_LENGHT &&
-            ) begin          // Gol do player 2
+            ~(`BALL_Y <= `P1_POS + PLAYER_MID_LENGHT &&
+              `BALL_Y >= `P1_POS - PLAYER_MID_LENGHT)) begin          // Gol do player 2
           `P2_SCORE <= `P2_SCORE + 16'd1; 
 
           // Retornar bola para centro da quadra
@@ -171,7 +171,9 @@ always_ff @(posedge clk) begin
           ball_vel_x <= 16'd5; 
           ball_vel_y <= 16'd0;
         end
-        else if (`BALL_X >= 16'd500) begin    // Gol do player 1
+        else if (`BALL_X >= 16'd512 && 
+            ~(`BALL_Y <= `P2_POS + PLAYER_MID_LENGHT &&
+              `BALL_Y >= `P2_POS - PLAYER_MID_LENGHT)) begin    // Gol do player 1
           `P1_SCORE <= `P1_SCORE + 16'd1; 
           
           // Retornar bola para centro da quadra
@@ -191,7 +193,7 @@ always_ff @(posedge clk) begin
             ball_vel_y <= -ball_vel_y;
           end
           else begin
-            if ((`BALL_X >= 16'd11 && `BALL_X < 16'd14) && 
+            if ((`BALL_X < 16'd13) && 
                 (`BALL_Y <= `P1_POS + PLAYER_MID_LENGHT && `BALL_Y >= `P1_POS - PLAYER_MID_LENGHT)) begin // Se bola está próxima do player 1
 
               if (`P1_MOV == `BAIXO && ball_vel_y <= 0) begin
@@ -215,7 +217,7 @@ always_ff @(posedge clk) begin
               end
             end
 
-            else if ((`BALL_X >= 16'd498 && `BALL_X < 16'd501) && 
+            else if ((`BALL_X > 16'd499) && 
                 (`BALL_Y <= `P2_POS + PLAYER_MID_LENGHT && `BALL_Y >= `P2_POS - PLAYER_MID_LENGHT)) begin // Se bola está próxima do player 2
 
               if (`P2_MOV == `BAIXO && ball_vel_y <= 0) begin

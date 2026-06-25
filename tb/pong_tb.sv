@@ -21,12 +21,12 @@ pong_top PONG(
 
 always #(CLK_PERIOD/2) clk = ~clk;
 
-task send_uart_byte(input logic [7:0] byte);
+task send_uart_byte(input logic [7:0] bits);
     begin
         rx = 1'b0;
         #BIT_PERIOD;
         for (int i = 0; i < 8; i++) begin
-            rx = byte[i];
+            rx = bits[i];
             #BIT_PERIOD;
         end
         rx = 1'b1;
