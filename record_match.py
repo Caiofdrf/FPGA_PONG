@@ -31,7 +31,7 @@ p1_score_val = 0
 p2_score_val = 0
 endgame = 0
 winner = 0
-log_file = open("movements.txt", "w")
+log_file = open("movements_input.txt", "w")
 
 
 score_font = pygame.font.SysFont("Arial", 18, 1, 0)
@@ -104,13 +104,13 @@ while running:
     ball_y += ball_vel_y
 
 
-    if ball_x <= 2:
+    if (ball_x <= 0 and not(ball_y <= p1_pos + PLAYER_MID_LENGHT and ball_y >= p1_pos - PLAYER_MID_LENGHT)):
         p2_score_val += 1
         ball_x = 256
         ball_y = 128
         ball_vel_x = 5
         ball_vel_y = 0
-    elif ball_x >= 508:
+    elif (ball_x >= 512 and not(ball_y <= p2_pos + PLAYER_MID_LENGHT and ball_y >= p2_pos - PLAYER_MID_LENGHT)):
         p1_score_val += 1
         ball_x = 256
         ball_y = 128
@@ -124,7 +124,7 @@ while running:
             ball_y = SCREEN_BOTTOM - 2
             ball_vel_y *= -1
         else:
-            if ((ball_x >= 11 and ball_x < 13) and 
+            if ((ball_x < 13) and 
                 (ball_y <= p1_pos + PLAYER_MID_LENGHT and ball_y >= p1_pos - PLAYER_MID_LENGHT)):
                 if p1_mov == BAIXO and ball_vel_y <= 0:
                     ball_vel_y = -ball_vel_y - VAR_VEL
@@ -140,8 +140,7 @@ while running:
                     ball_vel_x = -ball_vel_x + VAR_VEL
                 else:
                     ball_vel_x *= -1
-
-            elif ((ball_x > 499 and ball_x <= 501) and 
+            elif ((ball_x > 499) and 
                 (ball_y <= p2_pos + PLAYER_MID_LENGHT and ball_y >= p2_pos - PLAYER_MID_LENGHT)):
                 if p2_mov == BAIXO and ball_vel_y <= 0:
                     ball_vel_y = -ball_vel_y - VAR_VEL

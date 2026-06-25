@@ -160,7 +160,9 @@ always_ff @(posedge clk) begin
       end
 
       COLS_VER: begin
-        if (`BALL_X <= 16'd10) begin          // Gol do player 2
+        if (`BALL_X <= 16'd0 && 
+            `BALL_Y <= `P1_POS + PLAYER_MID_LENGHT &&
+            ) begin          // Gol do player 2
           `P2_SCORE <= `P2_SCORE + 16'd1; 
 
           // Retornar bola para centro da quadra

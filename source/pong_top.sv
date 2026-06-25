@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module pong_top(
     input logic clk, 
     input logic rst,
