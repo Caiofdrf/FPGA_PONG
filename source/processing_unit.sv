@@ -24,13 +24,13 @@ module processing_unit (
 `define PARADO 16'd1
 `define BAIXO  16'd0
 
-localparam logic [15:0] VAR_VEL           = 16'd2;
-localparam logic [15:0] PLAYER_VEL        = 16'd5;
-localparam logic [15:0] PLAYER_MID_LENGHT = 16'd24;
-localparam logic [15:0] SCREEN_H          = 16'd206;
-localparam logic [15:0] SCREEN_TOP        = 16'd25;
-localparam logic [15:0] SCREEN_BOTTOM     = 16'd231; 
-localparam logic [15:0] SCREEN_W          = 16'd512; 
+localparam logic signed [15:0] VAR_VEL           = 16'd2;
+localparam logic signed [15:0] PLAYER_VEL        = 16'd5;
+localparam logic signed [15:0] PLAYER_MID_LENGHT = 16'd24;
+localparam logic signed [15:0] SCREEN_H          = 16'd206;
+localparam logic signed [15:0] SCREEN_TOP        = 16'd25;
+localparam logic signed [15:0] SCREEN_BOTTOM     = 16'd231; 
+localparam logic signed [15:0] SCREEN_W          = 16'd512; 
 
 logic [2:0] byte_index; 
 logic wait_uart; 
@@ -117,6 +117,12 @@ always_ff @(posedge clk) begin
     uart_tx_valid <= 1'b0;
 
     case (current_state)
+      IDLE: begin
+        byte_index <= 3'd0;
+        data_sent  <= 1'b0;
+        wait_uart  <= 1'b0;
+      end
+      
       GET_DATA: begin
         temp_ram <= ram_data;
       end
