@@ -124,7 +124,11 @@ always_ff @(posedge clk) begin
       end
       
       GET_DATA: begin
-        temp_ram <= ram_data;
+        for (int r = 0; r < 3; r++) begin
+            for (int c = 0; c < 3; c++) begin
+                temp_ram[r][c] <= ram_data[r][c];
+            end
+        end
       end
 
       POS_CALC: begin
@@ -253,16 +257,19 @@ always_ff @(posedge clk) begin
 
       SAVE_DATA: begin
         w_en <= 1'd1;
-        ram_write <= temp_ram;
+        for (int r = 0; r < 3; r++) begin
+            for (int c = 0; c < 3; c++) begin
+                ram_write[r][c] <= temp_ram[r][c];
+            end
+        end
       end
 
       SEND_DATA: begin
         case (tx_sub_state)
-          2'd0: begin // Passo 0: Dispara o sinal de válido
+          2'd0: begin
             uart_tx_valid <= 1'b1;
             tx_sub_state  <= 2'd1;
             
-            // Define o dado de saída baseado no índice
             case(byte_index)
               3'd0: uart_out <= `P1_POS[7:0];
               3'd1: uart_out <= `P2_POS[7:0];
@@ -283,7 +290,7 @@ always_ff @(posedge clk) begin
           2'd2: begin
             if (!uart_tx_busy) begin
               if (byte_index == 3'd5) begin
-                data_sent <= 1'b1; // Enviou todos os 6 bytes!
+                data_sent <= 1'b1;
               end
               else begin
                 byte_index   <= byte_index + 3'd1;

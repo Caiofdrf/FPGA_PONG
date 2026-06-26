@@ -52,7 +52,11 @@ always_ff @(posedge clk) begin
         end
 
         if (w_en) begin
-            ram <= data_in;
+            for (int r = 0; r < 3; r++) begin
+                for (int c = 0; c < 3; c++) begin
+                    ram[r][c] <= data_in[r][c];
+                end
+            end
         end
     end
 end
