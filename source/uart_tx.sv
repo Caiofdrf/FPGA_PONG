@@ -14,6 +14,19 @@ module uart_transmitter (
     logic [7:0] data_buffer;
     logic [7:0] shift_buffer;
     logic [2:0] data_counter;
+    logic tx_data_ready_reg;
+
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            tx_data_ready_reg <= 1'b0;
+        end else begin
+            if (tx_data_valid) begin
+                tx_data_ready_reg <= 1'b1;
+            end else if (current_state == IDLE && tx_en && tx_data_ready_reg) begin
+                tx_data_ready_reg <= 1'b0;
+            end
+        end
+    end
 
     always_ff @(posedge clk) begin
        if (rst) begin
@@ -30,7 +43,7 @@ module uart_transmitter (
 
         case (current_state)
             IDLE: begin
-                if (tx_data_valid) begin
+                if (tx_data_ready_reg && tx_en) begin
                     next_state = START;
                 end
             end
@@ -79,7 +92,7 @@ module uart_transmitter (
         end
 
         else begin
-            if (current_state == IDLE & tx_data_valid) begin
+            if (current_state == IDLE && tx_data_ready_reg && tx_en) begin
                 data_buffer <= data_in;
                 shift_buffer <= data_in;
                 data_counter <= 3'd0;

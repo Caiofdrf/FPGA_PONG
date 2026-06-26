@@ -62,6 +62,7 @@ initial begin
             j = 0;
         end
         $fflush(file_output);
+        #(BIT_PERIOD * 2);
     end
 end
 

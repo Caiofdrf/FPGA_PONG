@@ -124,11 +124,7 @@ always_ff @(posedge clk) begin
       end
       
       GET_DATA: begin
-        for (int r = 0; r < 3; r++) begin
-            for (int c = 0; c < 3; c++) begin
-                temp_ram[r][c] <= ram_data[r][c];
-            end
-        end
+        temp_ram <= ram_data;
       end
 
       POS_CALC: begin
@@ -257,11 +253,7 @@ always_ff @(posedge clk) begin
 
       SAVE_DATA: begin
         w_en <= 1'd1;
-        for (int r = 0; r < 3; r++) begin
-            for (int c = 0; c < 3; c++) begin
-                ram_write[r][c] <= temp_ram[r][c];
-            end
-        end
+        ram_write <= temp_ram;
       end
 
       SEND_DATA: begin
