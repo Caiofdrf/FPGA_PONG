@@ -32,7 +32,9 @@ p2_score_val = 0
 endgame = 0
 winner = 0
 log_file = open("./movements_input.txt", "w")
+expected_output_file = open("./expected_output.txt", "w")
 
+expected_output_file.write("P1_POS    |     P2_POS    |    BALL_X    |    BALL_Y    |    END_BYTE\n")
 
 score_font = pygame.font.SysFont("Arial", 18, 1, 0)
 time_font = pygame.font.SysFont("Arial", 12, 0, 0)
@@ -76,7 +78,7 @@ while running:
     else:
         p2_log = "001"
     log_file.write(f"{endgame}{winner}{p1_log}{p2_log}\n")
-    
+    expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{bin(p1_score_val)}{bin(p2_score_val)}\n")
     # Desenvolvimento da física 
     if p1_mov == BAIXO:
         if (p1_pos + PLAYER_VEL + PLAYER_MID_LENGHT <= SCREEN_BOTTOM):
@@ -165,6 +167,7 @@ while running:
             winner = "1"
         running = False
         log_file.write(f"{endgame}{winner}{p1_log}{p2_log}\n")
+        expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{bin(p1_score_val)}{bin(p2_score_val)}\n")
     screen.fill("black")
 
     p1_score_txt = score_font.render(str(p1_score_val), True, "white")

@@ -110,7 +110,7 @@ always_ff @(posedge clk) begin
     byte_index <= 3'd0;
     uart_tx_valid <= 1'b0;
     data_sent <= 1'b0;
-    wait_uart <= 1'b0;
+    tx_sub_state <= 2'd0;
   end
   else begin
     w_en <= 1'd0;
@@ -257,10 +257,7 @@ always_ff @(posedge clk) begin
       end
 
       SEND_DATA: begin
-          uart_tx_valid <= 1'b1;
-          tx_sub_state <= 2'd1;
-
-          case (tx_sub_state)
+        case (tx_sub_state)
           2'd0: begin // Passo 0: Dispara o sinal de válido
             uart_tx_valid <= 1'b1;
             tx_sub_state  <= 2'd1;

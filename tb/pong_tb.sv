@@ -47,6 +47,7 @@ initial begin
     $fdisplay(file_output, "P1_POS    |     P2_POS    |    BALL_X    |    BALL_Y    |    END_BYTE\n");
     forever begin
         @(negedge tx);
+        #(BIT_PERIOD / 2);
         #(BIT_PERIOD);
 
         for (int i = 0; i < 8; i++) begin
@@ -83,7 +84,7 @@ initial begin
 
         wait(j == 1);
         wait(j == 0);
-        
+
         #(BIT_PERIOD * 3);
     end
 
