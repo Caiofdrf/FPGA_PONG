@@ -16,6 +16,13 @@ logic w_en;
 logic data_valid;
 logic uart_rx_ready;
 
+logic uart_rx_ready_delay;
+
+always_ff @(posedge clk) begin
+    if (rst) uart_rx_ready_delay <= 1'b0;
+    else     uart_rx_ready_delay <= uart_rx_ready;
+end
+
 uart_top UART(
     .clk(clk), 
     .rst(rst),
@@ -41,7 +48,7 @@ ram_memory RAM_U(
 processing_unit PROCESS_U(
     .clk(clk), 
     .rst(rst),
-    .new_moves(uart_rx_ready),
+    .new_moves(uart_rx_ready_delay),
     .uart_tx_busy(busy),
     .ram_data(ram_data_out),
     .w_en(w_en),

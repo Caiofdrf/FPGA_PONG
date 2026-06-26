@@ -47,7 +47,6 @@ initial begin
     $fdisplay(file_output, "P1_POS    |     P2_POS    |    BALL_X    |    BALL_Y    |    END_BYTE\n");
     forever begin
         @(negedge tx);
-        #(BIT_PERIOD / 2);
         #(BIT_PERIOD);
 
         for (int i = 0; i < 8; i++) begin
@@ -81,9 +80,13 @@ initial begin
 
     while($fscanf(file_input, "%b\n", data_in) == 1) begin
         send_uart_byte(data_in);
+
+        wait(j == 1);
+        wait(j == 0);
+        
         #(BIT_PERIOD * 3);
     end
-    
+
     #(BIT_PERIOD * 100);
     $fclose(file_input);
     $fclose(file_output);

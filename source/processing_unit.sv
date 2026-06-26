@@ -33,7 +33,7 @@ localparam logic signed [15:0] SCREEN_BOTTOM     = 16'd231;
 localparam logic signed [15:0] SCREEN_W          = 16'd512; 
 
 logic [2:0] byte_index; 
-logic wait_uart; 
+logic [1:0] tx_sub_state;
 logic data_sent;
 logic signed [15:0] ball_vel_x;
 logic signed [15:0] ball_vel_y;
@@ -120,7 +120,7 @@ always_ff @(posedge clk) begin
       IDLE: begin
         byte_index <= 3'd0;
         data_sent  <= 1'b0;
-        wait_uart  <= 1'b0;
+        tx_sub_state <= 2'd0;
       end
       
       GET_DATA: begin
@@ -257,45 +257,46 @@ always_ff @(posedge clk) begin
       end
 
       SEND_DATA: begin
-        if (!wait_uart) begin
           uart_tx_valid <= 1'b1;
-          wait_uart <= 1'b1;
+          tx_sub_state <= 2'd1;
 
-          case(byte_index)
-            3'd0: begin
-              uart_out <= `P1_POS[7:0];
-            end
-            3'd1: begin
-              uart_out <= `P2_POS[7:0];
-            end
-            3'd2: begin
-              uart_out <= `BALL_X[15:8];
-            end
-            3'd3: begin
-              uart_out <= `BALL_X[7:0];
-            end
-            3'd4: begin
-              uart_out <= `BALL_Y[7:0];
-            end
-            3'd5: begin                              
-              uart_out <= {game_over, p_wins, `P1_SCORE[2:0], `P2_SCORE[2:0]};
-            end
-            default begin
-              uart_out <= 8'd0;
-            end
-          endcase
-        end
-        else begin
-          if (!uart_tx_busy) begin
-            if (byte_index == 3'd5) begin
-              data_sent <= 1'd1;
-            end
-            else begin
-              byte_index <= byte_index + 3'd1;
-              wait_uart <= 1'd0;
+          case (tx_sub_state)
+          2'd0: begin // Passo 0: Dispara o sinal de válido
+            uart_tx_valid <= 1'b1;
+            tx_sub_state  <= 2'd1;
+            
+            // Define o dado de saída baseado no índice
+            case(byte_index)
+              3'd0: uart_out <= `P1_POS[7:0];
+              3'd1: uart_out <= `P2_POS[7:0];
+              3'd2: uart_out <= `BALL_X[15:8];
+              3'd3: uart_out <= `BALL_X[7:0];
+              3'd4: uart_out <= `BALL_Y[7:0];
+              3'd5: uart_out <= {game_over, p_wins, `P1_SCORE[2:0], `P2_SCORE[2:0]};
+              default: uart_out <= 8'd0;
+            endcase
+          end
+
+          2'd1: begin
+            if (uart_tx_busy) begin
+              tx_sub_state <= 2'd2;
             end
           end
-        end
+
+          2'd2: begin
+            if (!uart_tx_busy) begin
+              if (byte_index == 3'd5) begin
+                data_sent <= 1'b1; // Enviou todos os 6 bytes!
+              end
+              else begin
+                byte_index   <= byte_index + 3'd1;
+                tx_sub_state <= 2'd0;
+              end
+            end
+          end
+          
+          default: tx_sub_state <= 2'd0;
+        endcase
       end
     endcase
   end
