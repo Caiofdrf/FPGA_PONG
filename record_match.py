@@ -31,8 +31,8 @@ p1_score_val = 0
 p2_score_val = 0
 endgame = 0
 winner = 0
-log_file = open("./movements_input.txt", "w")
-expected_output_file = open("./expected_output.txt", "w")
+log_file = open("./FPGA_PONG/movements_input.txt", "w")
+expected_output_file = open("./FPGA_PONG/expected_output.txt", "w")
 
 expected_output_file.write("P1_POS    |     P2_POS    |    BALL_X    |    BALL_Y    |    END_BYTE\n")
 
@@ -65,20 +65,20 @@ while running:
         p2_mov = PARADO
 
     if p1_mov == CIMA:
-        p1_log = "010"
+        p1_log = "10"
     elif p1_mov == BAIXO:
-        p1_log = "000"
+        p1_log = "00"
     else:
-        p1_log = "001"
+        p1_log = "01"
 
     if p2_mov == CIMA:
-        p2_log = "010"
+        p2_log = "10"
     elif p2_mov == BAIXO:
-        p2_log = "000"
+        p2_log = "00"
     else:
-        p2_log = "001"
-    log_file.write(f"{endgame}{winner}{p1_log}{p2_log}\n")
-    expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{bin(p1_score_val)}{bin(p2_score_val)}\n")
+        p2_log = "01"
+    log_file.write(f"{endgame}{winner}00{p2_log}{p1_log}\n")
+    expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{p1_score_val:03b}{p2_score_val:03b}\n")
     # Desenvolvimento da física 
     if p1_mov == BAIXO:
         if (p1_pos + PLAYER_VEL + PLAYER_MID_LENGHT <= SCREEN_BOTTOM):
@@ -166,8 +166,8 @@ while running:
         else:
             winner = "1"
         running = False
-        log_file.write(f"{endgame}{winner}{p1_log}{p2_log}\n")
-        expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{bin(p1_score_val)}{bin(p2_score_val)}\n")
+        log_file.write(f"{endgame}{winner}00{p2_log}{p1_log}\n")
+        expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{p1_score_val:03b}{p2_score_val:03b}\n")
     screen.fill("black")
 
     p1_score_txt = score_font.render(str(p1_score_val), True, "white")
