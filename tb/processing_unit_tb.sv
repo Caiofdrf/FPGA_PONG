@@ -25,17 +25,26 @@ processing_unit UP(
 
 always #20 clk = ~clk;
 
-  always @(posedge clk) begin
-    if (uart_tx_valid) begin
-        uart_historico.push_back(uart_out);
-        $display("[MONITOR] Byte detectado e guardado: %h (Total acumulado: %0d)", uart_out, uart_historico.size());
-      	$display("w_en: %d", w_en);
-    end
+always @(posedge clk) begin
+  if (uart_tx_valid) begin
+      uart_historico.push_back(uart_out);
+      $display("[MONITOR] Byte detectado e guardado: %h (Total acumulado: %0d)", uart_out, uart_historico.size());
+      $display("w_en: %d", w_en);
+  end
+end
+
+always @(posedge clk) begin
+  if (uart_tx_valid) begin
+    uart_tx_busy <= 1'b1;
+  end 
+  else if (uart_tx_busy) begin
+    repeat(4) @(posedge clk); 
+    uart_tx_busy <= 1'b0;
+  end
 end
   
 initial begin
     rst = 1;
-    uart_tx_busy = 0;
     new_moves = 0;
 
     #50;
@@ -47,7 +56,7 @@ initial begin
     ram_data[1][1] = 16'd128;  // P2_POS
     ram_data[0][2] = 16'd256;  // BALL_X
     ram_data[1][2] = 16'd128;  // BALL_Y
- 	ram_data[2][0] = 16'd3;    // P1_SCORE
+ 	  ram_data[2][0] = 16'd3;    // P1_SCORE
     ram_data[2][1] = 16'd0;    // P2_SCORE
     ram_data[2][2] = 16'd0;    // START/RST
 
@@ -72,8 +81,11 @@ initial begin
       $display("Byte [%0d]: 8'h%d (ou em binário: %b)", i, uart_historico[i], uart_historico[i]);
     end
 
-  
-  	ram_data = ram_write;
+    for (int r = 0; r < 3; r++) begin
+        for (int c = 0; c < 3; c++) begin
+            ram_data[r][c] = ram_write[r][c];
+        end
+    end
   
     ram_data[0][0] = 2;
     ram_data[0][1] = 0;

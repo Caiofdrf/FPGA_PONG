@@ -5,7 +5,8 @@ module ram_memory(
     input logic w_en,
     input logic [15:0] data_in [0:2][0:2],      // Informações vindas da UP
     input logic [7:0] uart_data_in,             // Informações vindas da UART
-    output logic [15:0] data_out [0:2][0:2]     // Informações saindo para UP
+    output logic [15:0] data_out [0:2][0:2],    // Informações saindo para UP
+    output logic new_moves
 );
 
 /*
@@ -49,6 +50,10 @@ always_ff @(posedge clk) begin
             ram[0][0] <= {14'd0, uart_data_in[1:0]};
             ram[0][1] <= {14'd0, uart_data_in[3:2]};
             ram[2][2] <= {15'd0, uart_data_in[7]};
+            new_moves <= 1'd1;
+        end
+        else begin
+            new_moves <= 1'd0;
         end
 
         if (w_en) begin
