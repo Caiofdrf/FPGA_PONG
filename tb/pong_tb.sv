@@ -36,6 +36,38 @@ task send_uart_byte(input logic [7:0] bits);
     end
 endtask
 
+// Computação dos inputs
+initial begin
+    clk = 0;
+    rst = 1;
+    rx = 1'b1;
+
+    #(CLK_PERIOD * 5);
+    rst = 0;
+    #(CLK_PERIOD * 5);
+
+    file_input = $fopen("../movements_input.txt", "r");
+    if (file_input == 0) begin
+        $display("Falha ao abrir arquivo de inputs");
+    end
+
+    while($fscanf(file_input, "%b\n", data_in) == 1) begin
+        send_uart_byte(data_in);
+
+        wait(PONG.UP.current_state == 3'd1);
+        wait(PONG.UP.current_state == 3'd0);
+
+        #(BIT_PERIOD * 3);
+    end
+
+    #(BIT_PERIOD * 100);
+    $fclose(file_input);
+    $fclose(file_output);
+
+    $display("Simulation done!\n");
+    $finish;
+end
+
 // Computação dos outputs
 initial begin
     file_output = $fopen("../movements_output.txt", "w");
@@ -48,12 +80,14 @@ initial begin
     forever begin
         @(negedge tx);
         #(BIT_PERIOD / 2);
-        #(BIT_PERIOD);
 
         for (int i = 0; i < 8; i++) begin
-            data_out[i] = tx;
             #(BIT_PERIOD);
+            data_out[i] = tx;
         end 
+
+        #(2*BIT_PERIOD);
+        
         data[j] = data_out;
         j = j + 1;
 
@@ -66,34 +100,4 @@ initial begin
     end
 end
 
-// Computação dos inputs
-initial begin
-    clk = 0;
-    rst = 1;
-    rx = 1'b1;
-
-    #(CLK_PERIOD * 5);
-    rst = 0;
-    #(CLK_PERIOD * 5);
-    file_input = $fopen("../movements_input.txt", "r");
-    if (file_input == 0) begin
-        $display("Falha ao abrir arquivo de inputs");
-    end
-
-    while($fscanf(file_input, "%b\n", data_in) == 1) begin
-        send_uart_byte(data_in);
-
-        wait(j == 1);
-        wait(j == 0);
-
-        #(BIT_PERIOD * 3);
-    end
-
-    #(BIT_PERIOD * 100);
-    $fclose(file_input);
-    $fclose(file_output);
-
-    $display("Simulation done!\n");
-    $finish;
-end
 endmodule

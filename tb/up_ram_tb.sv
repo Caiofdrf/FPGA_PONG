@@ -80,6 +80,7 @@ initial begin
 
     print_ram_state();
 
+    wait (UP.current_state != 3'd0);
     wait (UP.current_state == 3'd0);   // Espera voltar para IDLE
     print_ram_state();
 
@@ -93,9 +94,27 @@ initial begin
     
     print_ram_state();
 
+    wait (UP.current_state != 3'd0);
     wait (UP.current_state == 3'd0);
     print_ram_state();
 
+    #100;
+
+    uart_data_in = 8'b00001000;
+    for (int i = 0; i < 50; i++) begin
+        uart_w_en = 1;
+        @(posedge clk);
+        #1;
+        uart_w_en = 0;
+        
+        print_ram_state();
+
+        wait (UP.current_state != 3'd0);
+        wait (UP.current_state == 3'd0);
+        print_ram_state();
+        #50;
+    end
+    
     #50;
 
     $display("\n=== FIM DA SIMULAÇÃO: HISTÓRICO UART ===");

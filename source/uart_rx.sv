@@ -4,6 +4,7 @@ module uart_receiver (
     input logic rx,
     input logic rx_en,
     output logic ready,
+    output logic uart_w_en,
     output logic [7:0] data_out
 );
 
@@ -13,6 +14,8 @@ module uart_receiver (
     logic [3:0] data_counter;
     logic [7:0] shift_register;
 
+    assign uart_w_en = ready;
+    
     always_ff @(posedge clk) begin
        if (rst) begin
         current_state <= IDLE;
@@ -104,7 +107,7 @@ module uart_receiver (
 
         else begin
             if (ready) begin
-                ready <= 1'd0;
+                ready <= 1'd0; 
             end
 
             if (current_state == STOP && rx_en && sample_counter == 4'd15) begin

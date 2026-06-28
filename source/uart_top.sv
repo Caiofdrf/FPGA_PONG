@@ -7,6 +7,7 @@ module uart_top (
     output logic tx,
     output logic ready,
     output logic busy,
+    output logic uart_w_en,
     output logic [7:0] data_out
 );
     logic rx_en;
@@ -18,6 +19,7 @@ module uart_top (
         .rx(rx),
         .rx_en(rx_en),
         .ready(ready),
+        .uart_w_en(uart_w_en),
         .data_out(data_out)
     );
 
