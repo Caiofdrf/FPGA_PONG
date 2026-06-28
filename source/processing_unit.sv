@@ -229,19 +229,19 @@ always_ff @(posedge clk) begin
 
               if (`P2_MOV == `BAIXO && ball_vel_y <= 0) begin
                 ball_vel_y <= -ball_vel_y - VAR_VEL;
-                ball_vel_x <= -ball_vel_x + VAR_VEL;
+                ball_vel_x <= -ball_vel_x - VAR_VEL;
               end
               else if (`P2_MOV == `CIMA && ball_vel_y >= 0) begin
                 ball_vel_y <= -ball_vel_y + VAR_VEL;
-                ball_vel_x <= -ball_vel_x + VAR_VEL;
+                ball_vel_x <= -ball_vel_x - VAR_VEL;
               end
               else if (`P2_MOV == `CIMA && ball_vel_y <= 0) begin
                 ball_vel_y <= ball_vel_y - VAR_VEL;
-                ball_vel_x <= -ball_vel_x - VAR_VEL;
+                ball_vel_x <= -ball_vel_x + VAR_VEL;
               end
               else if (`P2_MOV == `BAIXO && ball_vel_y >= 0) begin
                 ball_vel_y <= ball_vel_y + VAR_VEL;
-                ball_vel_x <= -ball_vel_x - VAR_VEL;
+                ball_vel_x <= -ball_vel_x + VAR_VEL;
               end
               else begin
                 ball_vel_x <= -ball_vel_x;
