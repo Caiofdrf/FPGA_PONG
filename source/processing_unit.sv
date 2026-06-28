@@ -175,7 +175,7 @@ always_ff @(posedge clk) begin
           // Retornar bola para centro da quadra
           `BALL_X <= 16'd256;  // `BALL_X
           `BALL_Y <= 16'd128;  // `BALL_Y
-          ball_vel_x <= 16'd5; 
+          ball_vel_x <= -16'd5; 
           ball_vel_y <= 16'd0;
         end
         else if (`BALL_X >= 16'd506 && 
@@ -186,7 +186,7 @@ always_ff @(posedge clk) begin
           // Retornar bola para centro da quadra
           `BALL_X <= 16'd256;  // `BALL_X
           `BALL_Y <= 16'd128;  // `BALL_Y
-          ball_vel_x <= -16'd5; 
+          ball_vel_x <= 16'd5; 
           ball_vel_y <= 16'd0;
         end
 

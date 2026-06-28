@@ -161,10 +161,10 @@ while running:
 
     if p1_score_val == 5 or p2_score_val == 5:
         endgame = "1"
-        if p1_score_val ==5 :
-            winner = "0"
-        else:
+        if p1_score_val == 5 :
             winner = "1"
+        else:
+            winner = "0"
         running = False
         log_file.write(f"{endgame}{winner}00{p2_log}{p1_log}\n")
         expected_output_file.write(f"{p1_pos}    |     {p2_pos}    |    {ball_x}    |    {ball_y}    |    {endgame}{winner}{p1_score_val:03b}{p2_score_val:03b}\n")
