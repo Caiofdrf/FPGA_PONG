@@ -54,7 +54,7 @@ initial begin
     while($fscanf(file_input, "%b\n", data_in) == 1) begin
         send_uart_byte(data_in);
 
-        wait(PONG.UP.current_state == 3'd1);
+        wait(PONG.UP.current_state != 3'd0);
         wait(PONG.UP.current_state == 3'd0);
 
         #(BIT_PERIOD * 3);

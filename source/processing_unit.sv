@@ -167,7 +167,7 @@ always_ff @(posedge clk) begin
       end
 
       COLS_VER: begin
-        if (`BALL_X <= 16'd0 && 
+        if (`BALL_X <= 16'd6 && 
             ~(`BALL_Y <= `P1_POS + PLAYER_MID_LENGHT &&
               `BALL_Y >= `P1_POS - PLAYER_MID_LENGHT)) begin          // Gol do player 2
           `P2_SCORE <= `P2_SCORE + 16'd1; 
@@ -178,7 +178,7 @@ always_ff @(posedge clk) begin
           ball_vel_x <= 16'd5; 
           ball_vel_y <= 16'd0;
         end
-        else if (`BALL_X >= 16'd512 && 
+        else if (`BALL_X >= 16'd506 && 
             ~(`BALL_Y <= `P2_POS + PLAYER_MID_LENGHT &&
               `BALL_Y >= `P2_POS - PLAYER_MID_LENGHT)) begin    // Gol do player 1
           `P1_SCORE <= `P1_SCORE + 16'd1; 

@@ -106,17 +106,17 @@ while running:
     ball_y += ball_vel_y
 
 
-    if (ball_x <= 0 and not(ball_y <= p1_pos + PLAYER_MID_LENGHT and ball_y >= p1_pos - PLAYER_MID_LENGHT)):
+    if (ball_x <= 6 and not(ball_y <= p1_pos + PLAYER_MID_LENGHT and ball_y >= p1_pos - PLAYER_MID_LENGHT)):
         p2_score_val += 1
         ball_x = 256
         ball_y = 128
-        ball_vel_x = 5
+        ball_vel_x = -5
         ball_vel_y = 0
-    elif (ball_x >= 512 and not(ball_y <= p2_pos + PLAYER_MID_LENGHT and ball_y >= p2_pos - PLAYER_MID_LENGHT)):
+    elif (ball_x >= 506 and not(ball_y <= p2_pos + PLAYER_MID_LENGHT and ball_y >= p2_pos - PLAYER_MID_LENGHT)):
         p1_score_val += 1
         ball_x = 256
         ball_y = 128
-        ball_vel_x = -5
+        ball_vel_x = 5
         ball_vel_y = 0
     else:
         if ball_y <= SCREEN_TOP:
